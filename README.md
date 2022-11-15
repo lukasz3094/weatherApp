@@ -16,5 +16,11 @@ npm run cities
 
 ### Wykres wilgotności
 
-Czasem nie ładuje się za pierwszym razem.
-Po ponownym wejściu w szczegóły miasta ładuje się bez problemu.
+Czasem nie ładuje się za pierwszym razem
+Po ponownym wejściu w szczegóły miasta ładuje się bez problemu
+
+## Info
+
+### Dane uzytkownika
+
+Obserwowane miasta przechowywane są w localStorage
