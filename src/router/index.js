@@ -1,20 +1,74 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "../views/HomeView";
+import dataStore from "../store";
+import LoginView from "../views/LoginView";
+import WeatherForecastView from "../views/WeatherForecastView";
+import CityWeatherInfoView from "../views/CityInfoView";
+import CityAddView from "../views/CityAddView";
+import CityShortView from "../views/CityShortView";
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "home",
     component: HomeView,
+    beforeEnter(to, from, next) {
+      if (dataStore.state.auth.authenticated) {
+        next();
+      } else {
+        next("/login");
+      }
+    },
+    children: [
+      {
+        path: "/weatherforecast",
+        name: "weatherforecast",
+        component: WeatherForecastView,
+        children: [
+          {
+            path: "/cityshortview/:name",
+            name: "cityshortview",
+            component: CityShortView,
+          },
+          {
+            path: "",
+            name: "defaultcityshort",
+            component: CityShortView,
+          },
+        ],
+      },
+      {
+        path: "/cityweatherinfo/:id",
+        name: "cityweatherinfo",
+        component: CityWeatherInfoView,
+      },
+      {
+        path: "/cityadd",
+        name: "cityadd",
+        component: CityAddView,
+      },
+      {
+        path: "",
+        name: "defaultcitiesinfo",
+        component: WeatherForecastView,
+      },
+    ],
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/login",
+    name: "login",
+    component: LoginView,
+    beforeEnter(to, from, next) {
+      if (dataStore.state.auth.authenticated) {
+        next("/home");
+      } else {
+        next();
+      }
+    },
+  },
+  {
+    path: "/:catchAll(.*)",
+    redirect: "/home",
   },
 ];
 
